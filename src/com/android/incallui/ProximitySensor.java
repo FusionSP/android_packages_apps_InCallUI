@@ -45,6 +45,7 @@ public class ProximitySensor implements AccelerometerListener.OrientationListene
     private final PowerManager mPowerManager;
     private final AudioModeProvider mAudioModeProvider;
     private final AccelerometerListener mAccelerometerListener;
+    private final ProximityListener mProximityListener;
     private int mOrientation = AccelerometerListener.ORIENTATION_UNKNOWN;
     private boolean mUiShowing = false;
     private boolean mIsPhoneOffhook = false;
@@ -59,6 +60,7 @@ public class ProximitySensor implements AccelerometerListener.OrientationListene
         mContext = context;
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         mAccelerometerListener = new AccelerometerListener(context, this);
+        mProximityListener = new ProximityListener(context);
         mAudioModeProvider = audioModeProvider;
         mAudioModeProvider.addListener(this);
     }
@@ -67,6 +69,7 @@ public class ProximitySensor implements AccelerometerListener.OrientationListene
         mAudioModeProvider.removeListener(this);
 
         mAccelerometerListener.enable(false);
+        mProximityListener.enable(false);
 
         TelecomAdapter.getInstance().turnOffProximitySensor(true);
     }
@@ -96,6 +99,7 @@ public class ProximitySensor implements AccelerometerListener.OrientationListene
 
             mOrientation = AccelerometerListener.ORIENTATION_UNKNOWN;
             mAccelerometerListener.enable(mIsPhoneOffhook);
+            mProximityListener.enable(mIsPhoneOffhook);
 
             updateProximitySensorMode();
         }
@@ -154,6 +158,10 @@ public class ProximitySensor implements AccelerometerListener.OrientationListene
      */
     public boolean isScreenReallyOff() {
         return !mPowerManager.isScreenOn();
+    }
+
+    public boolean isScreenOffByProximity() {
+        return mProximityListener.isActive();
     }
 
     /**
