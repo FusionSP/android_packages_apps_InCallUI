@@ -48,12 +48,16 @@ public class ProximitySensor implements AccelerometerListener.OrientationListene
     private static final String PROXIMITY_SENSOR = "proximity_sensor";
 
     private final PowerManager mPowerManager;
+    private SensorManager mSensor;
+    private Sensor mProxSensor;
     private final AudioModeProvider mAudioModeProvider;
     private final AccelerometerListener mAccelerometerListener;
     private final ProximityListener mProximityListener;
     private int mOrientation = AccelerometerListener.ORIENTATION_UNKNOWN;
     private boolean mUiShowing = false;
+    private boolean mIsPhoneOutgoing = false;
     private boolean mIsPhoneOffhook = false;
+    private boolean mProximitySpeaker = false;
     private boolean mDialpadVisible;
     private Context mContext;
 
